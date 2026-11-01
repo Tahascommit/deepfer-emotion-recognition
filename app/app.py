@@ -67,7 +67,8 @@ def analyse(rgb, whole_face):
 
 
 def show(rgb, key):
-    """Show the annotated picture and one result card per face."""
+    """Show the annotated picture and one result card per face. The key changes with every new picture,
+    so the 'cropped face' box starts from the right default each time."""
     small = max(rgb.shape[:2]) <= 120
     whole = st.checkbox("The picture is already a cropped face (skip face detection)", value=small, key=f"whole_{key}")
     out, boxes, faces, probs, ms = analyse(rgb, whole)
@@ -103,8 +104,7 @@ with st.sidebar:
     ts = CARD["test_scores"]
     st.metric("Test accuracy", f"{ts['accuracy']:.1%}")
     st.metric("Test macro F1", f"{ts['macro F1']:.3f}")
-    st.caption("Scores on test faces the model never saw. Speed per face: "
-               + ", ".join(f"{k.split('(')[-1].rstrip(')')} {v:.1f} ms" for k, v in CARD["ms_per_face"].items()))
+    st.caption("Scores on the 6,952 test faces the model never saw. The time of every analysis is shown under the picture.")
     MIN_CONF = st.slider("Say 'not sure' below this confidence", 0.0, 1.0, 0.5, 0.05)
     SHOW_CAM = st.checkbox("Show Grad-CAM heat maps", value=True)
     st.caption("Emotions: " + ", ".join(CLASSES))
@@ -121,21 +121,21 @@ with tab_photo:
     pick = st.selectbox("...or try a test picture (the file name is the true emotion)", choices)
     rgb = None
     if up is not None:
-        rgb = decode(up.getvalue())
+        rgb, pic_id = decode(up.getvalue()), f"up_{up.file_id}"
         if rgb is None:
             st.error("This file could not be read as an image.")
     elif pick != "(none)":
         path = demo if pick.startswith("demo") else ROOT / "outputs" / "sample_faces" / pick
-        rgb = cv2.cvtColor(cv2.imread(str(path)), cv2.COLOR_BGR2RGB)
+        rgb, pic_id = cv2.cvtColor(cv2.imread(str(path)), cv2.COLOR_BGR2RGB), pick
     if rgb is not None:
-        show(rgb, "photo")
+        show(rgb, f"photo_{pic_id}")
 
 # ---------- tab 2: a snapshot from the webcam
 with tab_cam:
     st.write("Take a picture with your webcam. Face the camera with even light for the best result.")
     shot = st.camera_input("Webcam")
     if shot is not None:
-        show(decode(shot.getvalue()), "cam")
+        show(decode(shot.getvalue()), f"cam_{shot.file_id}")
 
 # ---------- tab 3: the live webcam window
 with tab_live:
@@ -157,7 +157,7 @@ with tab_info:
     for fname, caption in [("final_confusion_matrix.png", "Confusion matrix of the final model"),
                            ("explain_gradcam_average.png", "Average Grad-CAM per emotion"),
                            ("explain_occlusion.png", "Which face regions each emotion depends on"),
-                           ("final_robustness.png", "Robustness to lighting, noise and blur"),
+                           ("final_robustness.png", "How the model copes with lighting, noise, blur and a covered mouth"),
                            ("final_coverage_accuracy.png", "Accuracy when the model may say 'not sure'")]:
         if (out / "figures" / fname).exists():
             st.image(str(out / "figures" / fname), caption=caption)
