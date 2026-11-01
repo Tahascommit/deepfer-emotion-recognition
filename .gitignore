@@ -1,0 +1,10 @@
+__pycache__/
+.venv/
+.wheels/
+.ipynb_checkpoints/
+.DS_Store
+.vscode/
+.idea/
+# the images are committed once, as data/face_emotion_images.zip
+data/images/
+_quick_test.ipynb
