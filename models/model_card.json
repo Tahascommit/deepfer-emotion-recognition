@@ -1,0 +1,43 @@
+{
+  "members": [
+    "resnet18.pt",
+    "deepfer_cnn.pt"
+  ],
+  "member_names": [
+    "ResNet18",
+    "CNN"
+  ],
+  "tta": true,
+  "temperature": 0.9,
+  "classes": [
+    "angry",
+    "disgust",
+    "fear",
+    "happy",
+    "neutral",
+    "sad",
+    "surprise"
+  ],
+  "input": "48x48 grayscale face, values 0-255 (the model scales them)",
+  "test_scores": {
+    "accuracy": 0.7066,
+    "macro precision": 0.6958,
+    "macro recall": 0.6865,
+    "macro F1": 0.6883,
+    "weighted F1": 0.705
+  },
+  "val_scores": {
+    "accuracy": 0.6987,
+    "macro precision": 0.6713,
+    "macro recall": 0.6543,
+    "macro F1": 0.659,
+    "weighted F1": 0.6969
+  },
+  "ms_per_face": {
+    "ms per face (cuda)": 13.34,
+    "ms per face (cpu)": 98.18
+  },
+  "trained_on": "cuda",
+  "pixel_mean": 0.5038674359638614,
+  "pixel_std": 0.25453151527510404
+}

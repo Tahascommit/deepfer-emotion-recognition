@@ -1,0 +1,5 @@
+model,parameters (M),file size (MB),ms per face (cuda),ms per face (cpu)
+CNN,6.429,25.779,2.623,25.162
+ResNet18,11.18,44.796,4.047,23.928
+EfficientNet-B0,4.017,16.348,8.12,18.156
+final model,17.609,70.575,13.339,98.18

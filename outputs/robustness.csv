@@ -1,0 +1,12 @@
+condition,accuracy,macro F1,accuracy drop
+original,0.7066,0.6883,0.0
+original + CLAHE,0.6748,0.6547,-0.0318
+dark (x0.45),0.6965,0.6763,-0.0101
+dark (x0.45) + CLAHE,0.6894,0.667,-0.0171
+very dark (x0.2),0.6519,0.624,-0.0547
+very dark (x0.2) + CLAHE,0.685,0.6589,-0.0216
+bright (+90),0.6677,0.6316,-0.0388
+low contrast (x0.4),0.6942,0.6701,-0.0124
+noise (sd 15),0.3967,0.3495,-0.3098
+blur (5x5 gaussian),0.5662,0.54,-0.1404
+mouth covered,0.5432,0.5163,-0.1634
